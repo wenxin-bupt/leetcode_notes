@@ -1,0 +1,62 @@
+### [Number of Islands](https://leetcode.com/problems/number-of-islands/)   
+
+Difficulty **Medium**
+
+tags `BFS`
+
+Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+**Example 1**:
+```
+11110
+11010
+11000
+00000
+```
+Answer: 1
+
+**Example 2**:
+```
+11000
+11000
+00100
+00011
+```
+Answer: 3
+
+思路：
+
+这道题考虑了下`union find`, 但是能用BFS实现~N的解法就不要去自寻烦恼
+
+要注意的Case:
+
+1. BFS写的时候能用递归就用递归好了和用队列在空间上是一样的， 而用队列你还需要多写很多行。
+
+**solution 1**
+
+```c++
+class Solution {
+    void bfsmarker(vector<vector<char>>& grid, int i, int j) {
+        if (i < 0 || j < 0 || i >= grid.size() || j >= grid[0].size() || grid[i][j] == '0') return;
+        grid[i][j] = '0';
+        bfsmarker(grid, i+1, j);
+        bfsmarker(grid, i-1, j);
+        bfsmarker(grid, i, j+1);
+        bfsmarker(grid, i, j-1);
+        return;
+    }
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        int res=0;
+        if (grid.size() == 0) return res;
+        vector<vector<int>> num(grid.size(), vector<int>(grid[0].size(), false));
+        for (int i = 0; i<grid.size(); i++)
+            for (int j = 0; j<grid[0].size(); j++)
+                if (grid[i][j] == '1'){
+                    res++;
+                    bfsmarker(grid, i, j);    
+                }
+        return res;
+    }
+};
+```

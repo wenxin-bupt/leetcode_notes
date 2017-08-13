@@ -36,21 +36,27 @@ Return: ["1:00", "2:00", "4:00", "8:00", "0:01", "0:02", "0:04", "0:08", "0:16",
 
 ```c++
 class Solution {
+    vector<int> countBits(int num) {
+        vector<int> count(1, 0);
+        for (int i=1; i < num+1; i++)
+            count.push_back(count[i&(i-1)]+1);
+        return count;
+     }
 public:
-    bool validUtf8(vector<int>& data) {
-        int count = 0;
-        for (auto c : data) {
-            if (count == 0) {
-                if ((c >> 5) == 0b110) count = 1;
-                else if ((c >> 4) == 0b1110) count = 2;
-                else if ((c >> 3) == 0b11110) count = 3;
-                else if ((c >> 7)) return false;
-            } else {
-                if ((c >> 6) != 0b10) return false;
-                count--;
+    vector<string> readBinaryWatch(int num) {
+        vector<int> hr = countBits(11);
+        vector<int> min = countBits(59);
+        vector<string> res;
+        if (num > 8) return res;
+        for (int h = 0; h < 12; h++) {
+            string hs = to_string(h);
+            for (int m = 0; m < 60; m++) {
+                if (min[m] != num - hr[h]) continue;
+                string ms = m>9 ? ":"+to_string(m) : ":0"+to_string(m);
+                res.push_back(hs + ms);
             }
         }
-        return count == 0;
+        return res;
     }
 };
 ```
